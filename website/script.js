@@ -39,7 +39,7 @@ feedbackInput.addEventListener('input', () => {
 // PREDICT BUTTON CLICK
 // ==========================================
 
-const API_URL = "https://web-production-0efba.up.railway.app/predict";
+const API_URL = "https://web-production-94faf.up.railway.app/predict";
 
 predictBtn.addEventListener('click', async () => {
     const feedback = feedbackInput.value.trim();

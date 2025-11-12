@@ -5,10 +5,10 @@ import joblib
 from typing import Any, Dict
 from fastapi.staticfiles import StaticFiles
 import os
+from pathlib import Path
 
-app = FastAPI()
+app = FastAPI(title="AI Customer Feedback Rating Predictor")
 
-# ✅ Allow frontend to access backend (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,10 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Load model
 try:
-    model = joblib.load("model.pkl")
-    print("✅ Model loaded successfully!")
+    MODEL_PATH = Path(__file__).resolve().parent / "model.pkl"
+    model = joblib.load(MODEL_PATH)
+    print(f"✅ Model loaded successfully from {MODEL_PATH}")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
     model = None
@@ -31,18 +31,19 @@ class InputText(BaseModel):
 def _map_sentiment_from_rating(rating: int) -> str:
     if rating >= 5:
         return "Highly Positive"
-    if rating == 4:
+    elif rating == 4:
         return "Positive"
-    if rating == 3:
+    elif rating == 3:
         return "Neutral"
-    if rating == 2:
+    elif rating == 2:
         return "Negative"
-    return "Highly Negative"
+    else:
+        return "Highly Negative"
 
 @app.get("/")
 def read_root():
     return {
-        "message": "AI Rating Predictor API is running!",
+        "message": "AI Rating Predictor API is running successfully!",
         "status": "healthy",
         "model_loaded": model is not None
     }
@@ -50,28 +51,41 @@ def read_root():
 @app.post("/predict")
 def predict_rating(data: InputText) -> Dict[str, Any]:
     text = data.text
-
     if not model:
-        return {"rating": 3, "confidence": 50, "sentiment": "Neutral"}
+        return {
+            "rating": 3,
+            "confidence": 50,
+            "sentiment": "Neutral",
+            "error": "Model not available"
+        }
 
     try:
         pred = model.predict([text])[0]
         rating = int(pred)
-        confidence = 90  # You can later calculate based on predict_proba
+        confidence = 75.0
+        if hasattr(model, "predict_proba"):
+            probs = model.predict_proba([text])[0]
+            try:
+                classes = list(model.classes_)
+                idx = classes.index(pred)
+                confidence = round(float(probs[idx]) * 100, 2)
+            except Exception:
+                confidence = round(float(probs.max()) * 100, 2)
+        sentiment = _map_sentiment_from_rating(rating)
+        print(f"Text: {text} → Rating: {rating}, Sentiment: {sentiment}")
+        return {
+            "rating": rating,
+            "confidence": confidence,
+            "sentiment": sentiment
+        }
     except Exception as e:
         print(f"Prediction error: {e}")
-        rating = 3
-        confidence = 60
+        return {
+            "rating": 3,
+            "confidence": 60,
+            "sentiment": "Neutral"
+        }
 
-    sentiment = _map_sentiment_from_rating(rating)
-
-    return {
-        "rating": rating,
-        "confidence": confidence,
-        "sentiment": sentiment
-    }
-
-# ✅ Serve static website only in local (not needed on Railway)
 if os.getenv("VERCEL") != "1":
     try:
         app.mount("/", StaticFiles(directory="website", html=True), name="website")
