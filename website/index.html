@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Customer Feedback Rating Predictor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">AI Powered</span>
+                        <br>Customer Feedback Rating Predictor
+                    </h1>
+                    <p class="hero-subtitle">
+                        Enter any customer feedback text and instantly get an AI-generated 1–5 star rating.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Advanced AI</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Real-time</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-illustration">
+                    <div class="illustration-container">
+                        <!-- Central AI Circle -->
+                        <div class="ai-circle">
+                            <i class="fas fa-robot"></i>
+                            
+                            <!-- Orbit Ring 1 with Dots -->
+                            <div class="orbit-ring orbit-1">
+                                <div class="orbit-dot dot-1"></div>
+                                <div class="orbit-dot dot-2"></div>
+                                <div class="orbit-dot dot-3"></div>
+                            </div>
+                            
+                            <!-- Orbit Ring 2 with Dots -->
+                            <div class="orbit-ring orbit-2">
+                                <div class="orbit-dot dot-1"></div>
+                                <div class="orbit-dot dot-2"></div>
+                                <div class="orbit-dot dot-3"></div>
+                                <div class="orbit-dot dot-4"></div>
+                            </div>
+                            
+                            <!-- Orbit Ring 3 with Dots -->
+                            <div class="orbit-ring orbit-3">
+                                <div class="orbit-dot dot-1"></div>
+                                <div class="orbit-dot dot-2"></div>
+                                <div class="orbit-dot dot-3"></div>
+                                <div class="orbit-dot dot-4"></div>
+                                <div class="orbit-dot dot-5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Input Section -->
+    <section class="input-section">
+        <div class="container">
+            <div class="glass-card main-card">
+                <div class="card-glow"></div>
+                <h2 class="card-title">
+                    <i class="fas fa-message"></i>
+                    Enter Feedback Text
+                </h2>
+                <div class="input-wrapper">
+                    <textarea id="feedbackInput" class="premium-textarea" placeholder="Type or paste customer feedback here…&#10;&#10;Example: 'The product quality is amazing! Fast delivery and excellent customer service. Highly recommend!'"></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span> characters
+                    </div>
+                </div>
+                <button class="predict-btn" id="predictBtn">
+                    <span class="btn-content">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                        Predict Rating
+                    </span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Our AI Predictor?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Driven Insights</h3>
+                    <p>Advanced machine learning algorithms analyze sentiment and context to provide accurate ratings.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast Predictions</h3>
+                    <p>Get instant results in milliseconds. No waiting, no delays – just pure AI-powered speed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Secure Local Processing</h3>
+                    <p>Your data stays private. Advanced encryption and secure processing ensure confidentiality.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Enterprise Quality Model</h3>
+                    <p>Built with state-of-the-art NLP models trained on millions of customer reviews.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Result Modal -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <div class="ai-badge">
+                    <i class="fas fa-microchip"></i>
+                    AI Analysis Complete
+                </div>
+                <h2>Predicted Rating</h2>
+            </div>
+            <div class="modal-body">
+                <div class="rating-display">
+                    <div class="stars-container" id="starsContainer">
+                        <i class="fas fa-star star"></i>
+                        <i class="fas fa-star star"></i>
+                        <i class="fas fa-star star"></i>
+                        <i class="fas fa-star star"></i>
+                        <i class="fas fa-star star"></i>
+                    </div>
+                    <div class="rating-value">
+                        <span id="ratingValue">0</span>
+                        <span class="rating-max">/ 5</span>
+                    </div>
+                </div>
+                <div class="confidence-section">
+                    <div class="confidence-label">
+                        <span>Confidence Level</span>
+                        <span id="confidenceValue">0%</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidenceFill"></div>
+                    </div>
+                </div>
+                <div class="sentiment-badge" id="sentimentBadge">
+                    <i class="fas fa-smile"></i>
+                    <span id="sentimentText">Positive</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast" id="errorToast">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="toastMessage">Please enter some feedback text!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <h3>Customer Feedback Rating Predictor</h3>
+                    <p>Powered by Advanced AI & Machine Learning</p>
+                </div>
+                <div class="footer-right">
+                    <p class="made-by">Made with <i class="fas fa-heart"></i> by <span class="gradient-text">Tanmay Singhal</span></p>
+                    <div class="social-links">
+                        <a href="https://github.com/tanmaysinghal" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/tanmaysinghal" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://twitter.com/tanmaysinghal" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="gradient-line"></div>
+                <p>&copy; 2025 AI Rating Predictor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
