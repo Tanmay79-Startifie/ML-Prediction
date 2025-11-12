@@ -39,8 +39,7 @@ feedbackInput.addEventListener('input', () => {
 // PREDICT BUTTON CLICK
 // ==========================================
 
-// Use the Railway backend predict endpoint (not /docs). Replace with your actual Railway URL if different.
-const API_URL = "https://ml-preduction-modal-production.up.railway.app/predict";
+const API_URL = "https://web-production-54605.up.railway.app/predict";
 
 predictBtn.addEventListener('click', async () => {
     const feedback = feedbackInput.value.trim();
@@ -68,18 +67,28 @@ predictBtn.addEventListener('click', async () => {
 
     // Call backend prediction API
     try {
-        // Use relative URL - works for both local and production
+        console.log('Calling API:', API_URL);
+        console.log('Request body:', { text: feedback });
+        
         const resp = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ text: feedback })
         });
 
-        if (!resp.ok) throw new Error('Prediction API error');
+        console.log('Response status:', resp.status);
+        
+        if (!resp.ok) {
+            const errorText = await resp.text();
+            console.error('API Error Response:', errorText);
+            throw new Error(`API returned ${resp.status}: ${errorText}`);
+        }
 
         const data = await resp.json();
+        console.log('API Response:', data);
 
         // Expecting: { rating: number, confidence: number, sentiment: string }
         const result = {
@@ -91,9 +100,14 @@ predictBtn.addEventListener('click', async () => {
         displayResult(result);
     } catch (err) {
         console.error('Prediction failed:', err);
+        console.error('Error details:', {
+            message: err.message,
+            name: err.name,
+            stack: err.stack
+        });
         // Fallback to demo generator if backend is unavailable
         const fallback = generatePrediction(feedback);
-        showToast('Backend unavailable — showing demo result.');
+        showToast('Unable to connect to AI model. Showing demo result.');
         displayResult(fallback);
     } finally {
         // Reset button

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .test-box {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CC9F0;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #7209B7;
+            color: #fff;
+        }
+        pre {
+            background: #0f1419;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Railway API Test</h1>
+    
+    <div class="test-box">
+        <h2>Test Configuration</h2>
+        <p><strong>API URL:</strong> <span id="apiUrl"></span></p>
+        <button onclick="testAPI()">Test API Connection</button>
+    </div>
+
+    <div class="test-box">
+        <h2>Test Results</h2>
+        <div id="results">Click "Test API Connection" to begin...</div>
+    </div>
+
+    <script>
+        const API_URL = "https://ml-preduction-model-production.up.railway.app/predict";
+        document.getElementById('apiUrl').textContent = API_URL;
+
+        async function testAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing API connection...</p>';
+
+            // Test 1: Check if API is reachable
+            try {
+                resultsDiv.innerHTML += '<p>📡 Step 1: Checking API endpoint...</p>';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        text: "This is a test review for the API connection" 
+                    })
+                });
+
+                resultsDiv.innerHTML += `<p class="success">✅ Connection successful! Status: ${response.status}</p>`;
+
+                // Test 2: Parse response
+                resultsDiv.innerHTML += '<p>📦 Step 2: Parsing response...</p>';
+                const data = await response.json();
+                
+                resultsDiv.innerHTML += `<p class="success">✅ Response parsed successfully!</p>`;
+                resultsDiv.innerHTML += '<p><strong>Response Data:</strong></p>';
+                resultsDiv.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+                // Test 3: Validate response structure
+                resultsDiv.innerHTML += '<p>🔍 Step 3: Validating response structure...</p>';
+                if (data.rating && data.confidence && data.sentiment) {
+                    resultsDiv.innerHTML += '<p class="success">✅ All required fields present!</p>';
+                    resultsDiv.innerHTML += `<ul>
+                        <li>Rating: ${data.rating}</li>
+                        <li>Confidence: ${data.confidence}%</li>
+                        <li>Sentiment: ${data.sentiment}</li>
+                    </ul>`;
+                } else {
+                    resultsDiv.innerHTML += '<p class="error">❌ Missing required fields in response!</p>';
+                }
+
+                resultsDiv.innerHTML += '<p class="success" style="font-size: 20px; margin-top: 20px;">🎉 API is working correctly!</p>';
+
+            } catch (error) {
+                resultsDiv.innerHTML += `<p class="error">❌ Error occurred:</p>`;
+                resultsDiv.innerHTML += `<pre class="error">${error.message}\n\nFull error:\n${error.stack}</pre>`;
+                
+                // Additional debugging
+                resultsDiv.innerHTML += '<p><strong>Possible issues:</strong></p>';
+                resultsDiv.innerHTML += '<ul>';
+                resultsDiv.innerHTML += '<li>Railway app might be sleeping (first request takes 30-60 seconds)</li>';
+                resultsDiv.innerHTML += '<li>CORS might not be configured correctly on Railway</li>';
+                resultsDiv.innerHTML += '<li>API endpoint URL might be incorrect</li>';
+                resultsDiv.innerHTML += '<li>Railway deployment might have failed</li>';
+                resultsDiv.innerHTML += '</ul>';
+            }
+        }
+    </script>
+</body>
+</html>
