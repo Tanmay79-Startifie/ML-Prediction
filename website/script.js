@@ -39,6 +39,8 @@ feedbackInput.addEventListener('input', () => {
 // PREDICT BUTTON CLICK
 // ==========================================
 
+const API_URL = "https://ml-preduction-model-production.up.railway.app/predict";
+
 predictBtn.addEventListener('click', async () => {
     const feedback = feedbackInput.value.trim();
 
@@ -66,7 +68,7 @@ predictBtn.addEventListener('click', async () => {
     // Call backend prediction API
     try {
         // Use relative URL - works for both local and production
-        const resp = await fetch('/predict', {
+        const resp = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
