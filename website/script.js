@@ -39,7 +39,8 @@ feedbackInput.addEventListener('input', () => {
 // PREDICT BUTTON CLICK
 // ==========================================
 
-const API_URL = "https://ml-preduction-model-production.up.railway.app/predict";
+// Use the Railway backend predict endpoint (not /docs). Replace with your actual Railway URL if different.
+const API_URL = "https://ml-preduction-modal-production.up.railway.app/predict";
 
 predictBtn.addEventListener('click', async () => {
     const feedback = feedbackInput.value.trim();

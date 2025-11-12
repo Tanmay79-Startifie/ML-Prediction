@@ -6,4 +6,3 @@ pydantic
 numpy
 pandas
 python-multipart
-
