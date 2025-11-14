@@ -18,12 +18,20 @@ app.add_middleware(
 )
 
 try:
-    MODEL_PATH = Path(__file__).resolve().parent / "model.pkl"
-    model = joblib.load(MODEL_PATH)
-    print(f"✅ Model loaded successfully from {MODEL_PATH}")
+    BASE_DIR = Path(__file__).resolve().parent
+    MODEL_PATH = BASE_DIR / "model.pkl"
+
+    if not MODEL_PATH.exists():
+        print(f"❌ model.pkl not found at {MODEL_PATH}")
+        model = None
+    else:
+        model = joblib.load(MODEL_PATH)
+        print(f"✅ Model loaded successfully from {MODEL_PATH}")
+
 except Exception as e:
     print(f"❌ Error loading model: {e}")
     model = None
+
 
 class InputText(BaseModel):
     text: str
